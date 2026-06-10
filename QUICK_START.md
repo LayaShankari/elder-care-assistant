@@ -154,7 +154,7 @@ docker-compose up
 All configuration is in `app/config.py` and read from `.env` file:
 
 ```
-DATABASE_URL=postgresql://user:password@localhost/db
+DATABASE_URL=postgresql+psycopg://user:password@localhost/db
 REDIS_URL=redis://localhost:6379/0
 JWT_SECRET=your-secret-key
 CLAUDE_API_KEY=your-claude-key

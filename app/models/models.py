@@ -1,6 +1,6 @@
 from sqlalchemy import Column, String, DateTime, Boolean, Integer, Numeric, Text, ForeignKey, JSON
 from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship as orm_relationship
 from datetime import datetime
 import uuid
 
@@ -25,11 +25,11 @@ class User(Base):
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     # Relationships
-    health_readings = relationship("HealthReading", back_populates="user", cascade="all, delete-orphan")
-    reminders = relationship("Reminder", back_populates="user", cascade="all, delete-orphan")
-    family_members = relationship("FamilyMember", back_populates="user", cascade="all, delete-orphan")
-    chat_messages = relationship("ChatMessage", back_populates="user", cascade="all, delete-orphan")
-    normal_ranges = relationship("NormalRange", back_populates="user", uselist=False, cascade="all, delete-orphan")
+    health_readings = orm_relationship("HealthReading", back_populates="user", cascade="all, delete-orphan")
+    reminders = orm_relationship("Reminder", back_populates="user", cascade="all, delete-orphan")
+    family_members = orm_relationship("FamilyMember", back_populates="user", cascade="all, delete-orphan")
+    chat_messages = orm_relationship("ChatMessage", back_populates="user", cascade="all, delete-orphan")
+    normal_ranges = orm_relationship("NormalRange", back_populates="user", uselist=False, cascade="all, delete-orphan")
 
 class HealthReading(Base):
     __tablename__ = "health_readings"
@@ -46,7 +46,7 @@ class HealthReading(Base):
     created_at = Column(DateTime, default=datetime.utcnow, index=True)
 
     # Relationships
-    user = relationship("User", back_populates="health_readings")
+    user = orm_relationship("User", back_populates="health_readings")
 
 class Reminder(Base):
     __tablename__ = "reminders"
@@ -66,7 +66,7 @@ class Reminder(Base):
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     # Relationships
-    user = relationship("User", back_populates="reminders")
+    user = orm_relationship("User", back_populates="reminders")
 
 class NormalRange(Base):
     __tablename__ = "normal_ranges"
@@ -87,7 +87,7 @@ class NormalRange(Base):
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     # Relationships
-    user = relationship("User", back_populates="normal_ranges")
+    user = orm_relationship("User", back_populates="normal_ranges")
 
 class FamilyMember(Base):
     __tablename__ = "family_members"
@@ -104,7 +104,7 @@ class FamilyMember(Base):
     joined_at = Column(DateTime, default=datetime.utcnow)
 
     # Relationships
-    user = relationship("User", back_populates="family_members")
+    user = orm_relationship("User", back_populates="family_members")
 
 class ChatMessage(Base):
     __tablename__ = "chat_messages"
@@ -118,4 +118,4 @@ class ChatMessage(Base):
     created_at = Column(DateTime, default=datetime.utcnow, index=True)
 
     # Relationships
-    user = relationship("User", back_populates="chat_messages")
+    user = orm_relationship("User", back_populates="chat_messages")

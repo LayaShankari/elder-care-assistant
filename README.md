@@ -109,7 +109,7 @@ Key environment variables to configure:
 ENV=development
 DEBUG=True
 SECRET_KEY=your-secret-key-change-in-production
-DATABASE_URL=postgresql://user:password@localhost:5432/elder_care_db
+DATABASE_URL=postgresql+psycopg://user:password@localhost:5432/elder_care_db
 REDIS_URL=redis://localhost:6379/0
 JWT_SECRET=your-jwt-secret-change-in-production
 CLAUDE_API_KEY=your-claude-api-key

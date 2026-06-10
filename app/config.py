@@ -1,3 +1,4 @@
+from pydantic import field_validator
 from pydantic_settings import BaseSettings
 from typing import List
 import os
@@ -12,7 +13,7 @@ class Settings(BaseSettings):
     # Database
     DATABASE_URL: str = os.getenv(
         "DATABASE_URL",
-        "postgresql://elder_user:elder_password@localhost:5432/elder_care_db"
+        "postgresql+psycopg://elder_user:elder_password@localhost:5432/elder_care_db"
     )
     DATABASE_ECHO: bool = os.getenv("DATABASE_ECHO", "False").lower() == "true"
 
@@ -60,6 +61,19 @@ class Settings(BaseSettings):
     TWILIO_ACCOUNT_SID: str = os.getenv("TWILIO_ACCOUNT_SID", "")
     TWILIO_AUTH_TOKEN: str = os.getenv("TWILIO_AUTH_TOKEN", "")
     TWILIO_PHONE_NUMBER: str = os.getenv("TWILIO_PHONE_NUMBER", "")
+
+    @field_validator("DEBUG", "DATABASE_ECHO", mode="before")
+    @classmethod
+    def parse_bool(cls, value):
+        if isinstance(value, bool):
+            return value
+        if isinstance(value, str):
+            normalized = value.strip().lower()
+            if normalized in {"1", "true", "yes", "on", "debug", "development"}:
+                return True
+            if normalized in {"0", "false", "no", "off", "release", "production"}:
+                return False
+        return value
 
     class Config:
         env_file = ".env"

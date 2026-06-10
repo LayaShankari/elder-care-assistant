@@ -1,0 +1,73 @@
+services:
+  api:
+    build: .
+    container_name: elder-care-api
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    ports:
+      - "8000:8000"
+    environment:
+      ENV: development
+      DEBUG: "true"
+      SECRET_KEY: change-me-in-development
+      JWT_SECRET: change-me-in-development
+      DATABASE_URL: postgresql+psycopg://elder_user:elder_password@db:5432/elder_care_db
+      REDIS_URL: redis://redis:6379/0
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+      - redis
+
+  worker:
+    build: .
+    container_name: elder-care-worker
+    command: celery -A app.tasks.celery worker --loglevel=info
+    environment:
+      ENV: development
+      DEBUG: "true"
+      SECRET_KEY: change-me-in-development
+      JWT_SECRET: change-me-in-development
+      DATABASE_URL: postgresql+psycopg://elder_user:elder_password@db:5432/elder_care_db
+      REDIS_URL: redis://redis:6379/0
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+      - redis
+
+  streamlit:
+    build: .
+    container_name: elder-care-streamlit
+    command: streamlit run streamlit_app.py --server.address 0.0.0.0 --server.port 8501
+    ports:
+      - "8501:8501"
+    environment:
+      API_BASE_URL: http://api:8000
+    volumes:
+      - .:/app
+    depends_on:
+      - api
+
+  db:
+    image: postgres:16-alpine
+    container_name: elder-care-db
+    environment:
+      POSTGRES_DB: elder_care_db
+      POSTGRES_USER: elder_user
+      POSTGRES_PASSWORD: elder_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    container_name: elder-care-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+volumes:
+  postgres_data:
+  redis_data:
