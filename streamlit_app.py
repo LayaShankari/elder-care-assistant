@@ -298,9 +298,6 @@ def render_emergency():
 
 
 st.title("Elder Care Assistant")
-st.caption(f"Connected to API: {API_BASE_URL}")
-
-render_status()
 
 tabs = st.tabs(["Account", "Health", "Reminders", "Chat", "Family", "Emergency"])
 with tabs[0]:
