@@ -5,7 +5,13 @@ import requests
 import streamlit as st
 
 
-API_BASE_URL = os.getenv("API_BASE_URL", "http://localhost:8000").rstrip("/")
+API_BASE_URL = os.getenv("API_BASE_URL")
+if not API_BASE_URL:
+    st.warning(
+        "API_BASE_URL is not configured. Please set the API_BASE_URL environment variable to your backend URL."
+    )
+    st.stop()
+API_BASE_URL = API_BASE_URL.rstrip("/")
 
 
 st.set_page_config(
