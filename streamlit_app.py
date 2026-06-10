@@ -20,6 +20,13 @@ st.set_page_config(
     layout="wide",
 )
 
+if "localhost" in API_BASE_URL or "127.0.0.1" in API_BASE_URL:
+    st.warning(
+        "API_BASE_URL is configured for localhost. In deployed environments, set API_BASE_URL to your backend host instead of localhost."
+    )
+else:
+    st.info(f"Using backend API: {API_BASE_URL}")
+
 
 def api_request(method, path, *, json=None, params=None, auth=True):
     headers = {}
