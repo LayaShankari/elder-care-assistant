@@ -31,12 +31,18 @@ class Settings(BaseSettings):
     CLAUDE_MODEL: str = os.getenv("CLAUDE_MODEL", "claude-3-5-sonnet-20241022")
 
     # CORS
-    CORS_ORIGINS: List[str] = [
-        "http://localhost:3000",
-        "http://localhost:3001",
-        "http://localhost:5173",
-        "http://127.0.0.1:3000",
-    ]
+    CORS_ORIGINS: List[str] = (
+        os.getenv(
+            "CORS_ORIGINS",
+            "http://localhost:3000,http://localhost:3001,http://localhost:5173,http://127.0.0.1:3000",
+        )
+        .split(",")
+    )
+
+    # Trusted hosts
+    TRUSTED_HOSTS: List[str] = (
+        os.getenv("TRUSTED_HOSTS", "localhost,127.0.0.1").split(",")
+    )
 
     # Rate Limiting
     RATE_LIMIT_REQUESTS: int = 100

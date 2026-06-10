@@ -41,7 +41,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.add_middleware(TrustedHostMiddleware, allowed_hosts=["localhost", "127.0.0.1"])
+trusted_hosts = settings.TRUSTED_HOSTS
+if not trusted_hosts or trusted_hosts == [""]:
+    trusted_hosts = ["*"]
+app.add_middleware(TrustedHostMiddleware, allowed_hosts=trusted_hosts)
 app.add_middleware(ErrorHandlerMiddleware)
 
 # Routes
