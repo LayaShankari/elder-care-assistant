@@ -4,7 +4,7 @@ from datetime import date
 import requests
 import streamlit as st
 
-API_BASE_URL = os.getenv("API_BASE_URL")
+API_BASE_URL = os.getenv("API_BASE_URL","http://localhost:8000")
 
 if not API_BASE_URL:
     st.warning(
