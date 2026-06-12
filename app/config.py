@@ -23,7 +23,10 @@ class Settings(BaseSettings):
 
     API_BASE_URL: str = "http://localhost:8000"
 
-    model_config = SettingsConfigDict(env_file=".env", extra='forbid')
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        case_sensitive=True,
+        extra='ignore')
 
     # JWT
     JWT_SECRET: str = os.getenv("JWT_SECRET", "your-jwt-secret-change-in-production")
