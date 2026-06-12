@@ -1,5 +1,5 @@
 from pydantic import field_validator
-from pydantic_settings import BaseSettings,SettingsConfigDict
+from pydantic_settings import BaseSettings
 from typing import List
 import os
 
@@ -21,12 +21,6 @@ class Settings(BaseSettings):
     # Redis
     REDIS_URL: str = os.getenv("REDIS_URL", "redis://localhost:6379/0")
 
-    API_BASE_URL: str = "http://localhost:8000"
-
-    model_config = SettingsConfigDict(
-        env_file=".env",
-        case_sensitive=True,
-        extra='ignore')
 
     # JWT
     JWT_SECRET: str = os.getenv("JWT_SECRET", "your-jwt-secret-change-in-production")
